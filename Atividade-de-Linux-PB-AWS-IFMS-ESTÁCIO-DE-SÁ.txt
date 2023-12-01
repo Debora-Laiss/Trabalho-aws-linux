@@ -1,0 +1,112 @@
+Relatório de Configuração do Ambiente EC2 e Servidor Apache
+Parte 1: Gerar uma chave pública para acesso ao ambiente EC2
+Passos:
+Gerar Par de Chaves SSH:
+bashCopy code
+ssh-keygen -t rsa -b 2048 -f my_key
+
+
+Explicação:
+
+ssh-keygen: Comando para gerar pares de chaves SSH.
+-t rsa: Define o tipo de chave como RSA.
+-b 2048: Especifica o número de bits na chave (2048 é um valor recomendado).
+-f my_key: Nome do arquivo para a chave.
+
+
+
+
+Conectar-se à instância do Amazon EC2 com a chave privada:
+
+
+bashCopy code
+
+aws ec2-instance-connect ssh --instance-id i-1234567890example --private-key-file
+/path/to/key.pem
+
+
+Explicação:
+
+aws ec2-instance-connect ssh: Comando para se conectar à instância usando AWS CLI.
+Parte 2: Liberar Portas de Comunicação para Acesso Público
+Passos:
+Faça login no console da AWS e navegue até o painel do EC2.
+Acesse "Security Groups" e edite as regras de entrada.
+
+Adicione regras para as portas 22, 111, 2049, 80 e 443.
+Exemplo de regras:
+SSH (22)
+HTTP (80)
+
+HTTPS (443)
+NFS (2049)
+NFS (111)
+Salve as alterações.
+
+
+
+
+Parte 3: Configurações no Linux
+Passos:
+
+
+Conectar-se via SSH:
+bashCopy code
+ssh -i ./Documentos/minha_chave.pem ec2-user@ec2-54-198-
+11427.compute1.amazonaws.com
+
+
+Explicação:
+
+
+ssh -i "minha_chave.pem": Conectar-se usando a chave privada.
+
+
+Instalar o Apache:
+bashCopy code
+sudo yum install httpd
+sudo systemctl start httpd
+sudo systemctl enable httpd
+Explicação:
+sudo: Executar com permissões de superusuário.
+
+yum: Gerenciador de pacotes do Amazon Linux.
+
+
+
+
+Atualizar a instância e reiniciar:
+
+bashCopy code
+sudo yum -y update
+sudo reboot
+
+
+Explicação:
+yum -y update: Atualizar pacotes.
+reboot: Reiniciar a instância.
+Instalar cliente NFS:
+bashCopy code
+
+sudo yum -y install nfs-utils
+
+
+
+
+Explicação:
+
+yum -y install nfs-utils: Instalar o cliente NFS.
+
+
+Configurar diretório NFS e criar script de validação:
+bashCopy code
+
+sudo mkdir -p /opt/nfstest/lais
+echo "<SCRIPT_CONTENT>" | sudo tee /opt/nfstest/lais/check_status.sh
+sudo chmod +x /opt/nfstest/lais/check_status.sh
+
+
+Explicação:
+mkdir -p: Criar diretório e seus pais se não existirem.
+tee: Escrever o conteúdo no arquivo especificado.
+
