@@ -96,7 +96,8 @@ sudo yum -y install nfs-utils
 Explicação:
 
 yum -y install nfs-utils: Instalar o cliente NFS.
-
+sudo mount -t nfs4 -o nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2,noresvport fs-0c7618d5591a69d65.efs.us-east-1.amazonaws.com:/ lais
+df -h
 
 Configurar diretório NFS e criar script de validação:
 bashCopy code
